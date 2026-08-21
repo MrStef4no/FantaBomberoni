@@ -132,6 +132,10 @@ if not st.session_state.logged_in:
 CURRENT_USER = st.session_state.current_user
 CURRENT_TEAM_ID = st.session_state.current_team_id
 IS_ADMIN = st.session_state.is_admin
+from services.telegram_utils import send_telegram_message
+
+if CURRENT_USER == "ADMIN":
+    send_telegram_message("🚀 Test da Streamlit")
 from services.time_utils import now_rome
 
 st.warning(
@@ -153,7 +157,7 @@ if st.sidebar.button("🚪 Logout"):
 # --------------------------------------------------
 
 if CURRENT_USER == "ADMIN":
-    send_telegram_message("🚀 Test da Streamlit")
+
     st.sidebar.success("👑 ADMIN")
 
 else:

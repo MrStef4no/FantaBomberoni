@@ -21,7 +21,7 @@ from services.market_automation import (
 from services.sealed_bid_utils import analyze_sealed_bids
 from services.round_utils import get_current_round
 from services.audit_utils import log_event
-
+from services.telegram_utils import send_telegram_message
 
 # --------------------------------------------------
 # CONFIGURAZIONE APP
@@ -132,10 +132,7 @@ if not st.session_state.logged_in:
 CURRENT_USER = st.session_state.current_user
 CURRENT_TEAM_ID = st.session_state.current_team_id
 IS_ADMIN = st.session_state.is_admin
-from services.telegram_utils import send_telegram_message
 
-if CURRENT_USER == "ADMIN":
-    send_telegram_message("🚀 Test da Streamlit")
 from services.time_utils import now_rome
 
 st.warning(
@@ -972,18 +969,7 @@ elif sezione == "💰 Mercato":
                         ))
 
                         auction_id = cursor.lastrowid
-
-                        from services.telegram_utils import send_telegram_message
-
-                        send_telegram_message(
-                            f"""📢 NUOVA ASTA
-
-                        Player ID: {player_id}
-                        Team ID: {team_id}
-                        Base: {offerta:.2f} FM
-                        """
-                        )
-                                
+                                                               
                         cursor.execute("""
                         INSERT INTO public_bids (
                             auction_id,
@@ -1023,6 +1009,17 @@ elif sezione == "💰 Mercato":
                             giocatore
                         )
 
+                        send_telegram_message(
+                            f"""📢 NUOVA ASTA
+                        
+                        ⚽ {giocatore}
+
+                        👤 Chiamante: {CURRENT_USER}
+
+                        💰 Base d'asta: {offerta:.2f} FM
+                        """
+                        )
+    
                         st.success("Asta creata correttamente")
 
         conn.close()

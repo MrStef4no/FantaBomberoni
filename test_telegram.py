@@ -1,4 +1,4 @@
-from telegram_utils import (
+from services.telegram_utils import (
     send_telegram_message
 )
 

@@ -153,7 +153,7 @@ if st.sidebar.button("🚪 Logout"):
 # --------------------------------------------------
 
 if CURRENT_USER == "ADMIN":
-
+    send_telegram_message("🚀 Test da Streamlit")
     st.sidebar.success("👑 ADMIN")
 
 else:
@@ -969,6 +969,16 @@ elif sezione == "💰 Mercato":
 
                         auction_id = cursor.lastrowid
 
+                        from services.telegram_utils import send_telegram_message
+
+                        send_telegram_message(
+                            f"""📢 NUOVA ASTA
+
+                        Player ID: {player_id}
+                        Team ID: {team_id}
+                        Base: {offerta:.2f} FM
+                        """
+                        )
                                 
                         cursor.execute("""
                         INSERT INTO public_bids (

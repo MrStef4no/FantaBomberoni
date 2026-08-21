@@ -1,9 +1,9 @@
-from datetime import datetime
+from services.time_utils import now_rome
 
 
 def get_market_phase():
 
-    now = datetime.now()
+    now = now_rome()
 
     weekday = now.weekday()
 

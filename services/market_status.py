@@ -1,5 +1,5 @@
 import sqlite3
-from datetime import datetime
+from services.time_utils import now_rome
 
 DB_PATH = "database/fantalega.db"
 
@@ -64,7 +64,7 @@ def get_market_phase():
     if override == "APERTO":
         return "CHIAMATA"
 
-    now = datetime.now()
+    now = now_rome()
 
     giorno = now.weekday()
     ora = now.hour

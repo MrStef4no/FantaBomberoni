@@ -132,12 +132,11 @@ if not st.session_state.logged_in:
 CURRENT_USER = st.session_state.current_user
 CURRENT_TEAM_ID = st.session_state.current_team_id
 IS_ADMIN = st.session_state.is_admin
-from datetime import datetime
+from services.time_utils import now_rome
 
 st.warning(
-    f"Ora sistema: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}"
+    f"Ora sistema: {now_rome().strftime('%d/%m/%Y %H:%M:%S')}"
 )
-
 
 # --------------------------------------------------
 # LOGOUT

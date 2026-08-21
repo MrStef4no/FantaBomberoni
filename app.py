@@ -35,8 +35,7 @@ st.set_page_config(
 DB_PATH = r"database/fantalega.db"
 
 VALUTA = "FM"
-MODALITA_TEST = True
-
+MODALITA_TEST = False
 
 # --------------------------------------------------
 # SESSIONE UTENTE
@@ -132,12 +131,6 @@ if not st.session_state.logged_in:
 CURRENT_USER = st.session_state.current_user
 CURRENT_TEAM_ID = st.session_state.current_team_id
 IS_ADMIN = st.session_state.is_admin
-
-from services.time_utils import now_rome
-
-st.warning(
-    f"Ora sistema: {now_rome().strftime('%d/%m/%Y %H:%M:%S')}"
-)
 
 # --------------------------------------------------
 # LOGOUT
@@ -1011,13 +1004,8 @@ elif sezione == "💰 Mercato":
 
                         send_telegram_message(
                             f"""📢 NUOVA ASTA
-                        
                         ⚽ {giocatore}
-
-                        👤 Chiamante: {CURRENT_USER}
-
-                        💰 Base d'asta: {offerta:.2f} FM
-                        """
+                        👤 {CURRENT_USER} | 💰 {offerta:.2f} FM"""
                         )
     
                         st.success("Asta creata correttamente")
@@ -1226,6 +1214,12 @@ elif sezione == "💰 Mercato":
                                     CURRENT_USER,
                                     "RILANCIO",
                                     f"{nome_giocatore} - {nuova_offerta:.2f} FM"
+                                )
+
+                                send_telegram_message(
+                                f"""⬆️ RILANCIO
+                                ⚽ {nome_giocatore}
+                                👤 {CURRENT_USER} | 💰 {nuova_offerta:.2f} FM"""
                                 )
 
                                 st.success(

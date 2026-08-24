@@ -278,7 +278,9 @@ def process_open_auctions():
                 ))
 
     conn.commit()
-
+    send_telegram_message(
+        f"DEBUG risultati={len(risultati)} spareggi={spareggi}"
+    )
     if risultati or spareggi > 0:
 
         messaggio = (

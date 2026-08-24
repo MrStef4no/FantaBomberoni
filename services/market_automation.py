@@ -1,6 +1,7 @@
 import sqlite3
 from services.sealed_bid_utils import analyze_sealed_bids
 from services.auction_finalizer import finalize_auction
+from services.telegram_utils import send_telegram_message
 
 DB_PATH = "database/fantalega.db"
 

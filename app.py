@@ -163,6 +163,13 @@ else:
 # --------------------------------------------------
 
 FASE_MERCATO = get_market_phase()
+
+from services.phase_notifications import (
+    check_phase_notifications
+)
+
+check_phase_notifications()
+
 if FASE_MERCATO == "BUSTE":
 
     close_single_participant_auctions()

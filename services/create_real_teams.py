@@ -8,9 +8,9 @@ cursor = conn.cursor()
 cursor.execute("DELETE FROM teams")
 
 squadre = [
-    "Kevin De SBruyne",
+    "Borussia Baggins",
     "FC La urina",
-    "F.C. CdF",
+    "Osasuca",
     "A.C. avanti chisto",
     "I Calypso Boys",
     "SKIBIDI BRONDBY",
@@ -19,7 +19,7 @@ squadre = [
     "Milancello",
     "Faggiani Tattici Nucleari",
     "Inter-Pol",
-    "PrimerPlate"
+    "Rivolta al Re"
 ]
 
 for squadra in squadre:

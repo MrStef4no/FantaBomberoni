@@ -1334,6 +1334,12 @@ elif sezione == "💰 Mercato":
                             nome_giocatore
                         )
 
+                        send_telegram_message(
+                            f"🚪 ABBANDONO ASTA\n"
+                            f"⚽ {nome_giocatore}\n"
+                            f"👤 {CURRENT_USER}"
+                        )
+
                         st.success(
                             "Abbandono registrato"
                         )

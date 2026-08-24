@@ -27,6 +27,14 @@ VALUES (
 )
 """)
 
+cursor.execute("""
+INSERT OR IGNORE INTO system_settings
+VALUES (
+    'LAST_NOTIFIED_PHASE',
+    'CHIUSO'
+)
+""")
+
 conn.commit()
 conn.close()
 

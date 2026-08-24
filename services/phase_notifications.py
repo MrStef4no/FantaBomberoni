@@ -30,4 +30,11 @@ def check_phase_notifications():
             "⚠️ Da questo momento sono consentiti solo rilanci"
         )
 
+    elif current_phase == "BUSTE":
+
+        send_telegram_message(
+            "🔵 FASE BUSTE CHIUSE\n"
+            "📝 Inserimento buste aperto"
+        )
+        
     set_last_notified_phase(current_phase)

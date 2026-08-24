@@ -19,6 +19,9 @@ def close_single_participant_auctions():
 
     aste = cursor.fetchall()
 
+    aggiudicazioni = []
+    aste_alle_buste = 0
+
     for asta in aste:
 
         auction_id = asta[0]
@@ -33,6 +36,7 @@ def close_single_participant_auctions():
         partecipanti_attivi = cursor.fetchone()[0]
 
         if partecipanti_attivi != 1:
+            aste_alle_buste += 1
             continue
 
         cursor.execute("""
@@ -93,12 +97,46 @@ def close_single_participant_auctions():
         ))
 
         cursor.execute("""
+        SELECT nome
+        FROM players
+        WHERE player_id = ?
+        """, (player_id,))
+
+        nome_giocatore = cursor.fetchone()[0]
+
+        cursor.execute("""
+        SELECT nome_squadra
+        FROM teams
+        WHERE team_id = ?
+        """, (team_id_vincitore,))
+
+        nome_squadra = cursor.fetchone()[0]
+
+        aggiudicazioni.append(
+            f"⚽ {nome_giocatore}\n"
+            f"👤 {nome_squadra} | 💰 {prezzo:.2f} FM"
+        )
+
+        cursor.execute("""
         UPDATE auctions
         SET stato = 'CHIUSA'
         WHERE auction_id = ?
         """, (auction_id,))
 
     conn.commit()
+
+    if aggiudicazioni:
+
+        testo_aggiudicazioni = "\n\n".join(
+            aggiudicazioni
+        )
+
+        send_telegram_message(
+            "🔵 FASE BUSTE CHIUSE\n\n"
+            "🏆 AGGIUDICAZIONI DIRETTE\n\n"
+            f"{testo_aggiudicazioni}\n\n"
+            f"⚖️ {aste_alle_buste} aste proseguono alle buste chiuse"
+        )
 
     conn.close()
 
@@ -113,6 +151,10 @@ def process_open_auctions():
     FROM auctions
     WHERE stato = 'APERTA'
     """)
+
+    risultati = []
+    spareggi = 0    
+    max_round_aperto = 1
 
     aste = cursor.fetchall()
 
@@ -129,13 +171,42 @@ def process_open_auctions():
             "VINCITORE"
         ]:
 
-            finalize_auction(
+            if finalize_auction(
                 conn,
                 auction_id,
                 risultato
-            )
+            ):
+
+                cursor.execute("""
+                SELECT nome
+                FROM players
+                WHERE player_id = (
+                    SELECT player_id
+                    FROM auctions
+                    WHERE auction_id = ?
+                )
+                """, (auction_id,))
+
+                nome_giocatore = cursor.fetchone()[0]
+
+                cursor.execute("""
+                SELECT nome_squadra
+                FROM teams
+                WHERE team_id = ?
+                """, (
+                    risultato["team_id"],
+                ))
+
+                nome_squadra = cursor.fetchone()[0]
+
+                risultati.append(
+                    f"⚽ {nome_giocatore}\n"
+                    f"👤 {nome_squadra} | 💰 {risultato['offerta']:.2f} FM"
+                )
 
         elif risultato["tipo"] == "PARITA":
+
+            spareggi += 1
 
             cursor.execute("""
             SELECT MAX(round_number)
@@ -151,6 +222,11 @@ def process_open_auctions():
                 ultimo_round = 1
 
             nuovo_round = ultimo_round + 1
+   
+            max_round_aperto = max(
+                max_round_aperto,
+                nuovo_round
+            )
 
             cursor.execute("""
             UPDATE sealed_rounds
@@ -200,4 +276,45 @@ def process_open_auctions():
                 ))
 
     conn.commit()
+
+    if risultati or spareggi > 0:
+
+        messaggio = (
+            f"🟣 APERTURA BUSTE - ROUND {max_round_aperto}\n"
+            "🏆 RISULTATI\n"
+        )
+
+        if risultati:   
+            messaggio += "\n" + "\n".join(risultati)
+
+        from services.time_utils import now_rome
+        from datetime import timedelta
+
+        ora_attuale = now_rome()
+
+        if ora_attuale.minute < 30:
+            scadenza = ora_attuale.replace(
+                minute=30,
+                second=0,
+                microsecond=0
+            )
+        else:
+            scadenza = (
+                ora_attuale.replace(
+                    minute=0,
+                    second=0,
+                    microsecond=0
+                )
+                + timedelta(hours=1)
+            )
+
+        scadenza = scadenza.strftime("%H:%M")
+
+        if spareggi > 0:
+            messaggio += (
+                f"\n⚖️ Aperto nuovo round per {spareggi} aste entro le ore {scadenza}"
+            )
+
+        send_telegram_message(messaggio)
+
     conn.close()

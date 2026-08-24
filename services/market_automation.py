@@ -141,9 +141,7 @@ def close_single_participant_auctions():
     conn.close()
 
 def process_open_auctions():
-    send_telegram_message(
-        "🧪 TEST process_open_auctions"
-    )
+    send_telegram_message("DEBUG - process_open_auctions eseguita")
     
     conn = sqlite3.connect(DB_PATH)
 

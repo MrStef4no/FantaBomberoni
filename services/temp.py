@@ -1,7 +1,9 @@
-from telegram_utils import (
-    send_telegram_message
-)
+import sqlite3
 
-send_telegram_message(
-    "🚀 Test Fanta Bomberoni"
-)
+conn = sqlite3.connect("database/fantalega.db")
+cur = conn.cursor()
+
+cur.execute("SELECT * FROM system_settings")
+print(cur.fetchall())
+
+conn.close()

@@ -7,7 +7,7 @@ cursor = conn.cursor()
 cursor.execute("DELETE FROM prizes")
 
 premi = [
-    ("Serie A", 1, 1400),
+    ("Serie A", 1, 1450),
     ("Serie A", 2, 600),
     ("Serie A", 3, 300),
     ("Coppa Italia", 1, 450),

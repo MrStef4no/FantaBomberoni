@@ -16,7 +16,7 @@ INSERT INTO users (
 VALUES (
     'ADMIN',
     NULL,
-    'AMMINISTRATORE',
+    'AMMO',
     1
 )
 """)

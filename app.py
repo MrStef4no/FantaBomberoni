@@ -1003,9 +1003,9 @@ elif sezione == "💰 Mercato":
                         )
 
                         send_telegram_message(
-                            f"""📢 NUOVA ASTA
-                        ⚽ {giocatore}
-                        👤 {CURRENT_USER} | 💰 {offerta:.2f} FM"""
+                            f"📢 NUOVA ASTA\n"
+                            f"⚽ {giocatore}\n"
+                            f"👤 {CURRENT_USER} | 💰 {offerta:.2f} FM"
                         )
     
                         st.success("Asta creata correttamente")
@@ -1217,9 +1217,9 @@ elif sezione == "💰 Mercato":
                                 )
 
                                 send_telegram_message(
-                                f"""⬆️ RILANCIO
-                                ⚽ {nome_giocatore}
-                                👤 {CURRENT_USER} | 💰 {nuova_offerta:.2f} FM"""
+                                f"⬆️ RILANCIO\n"
+                                f"⚽ {nome_giocatore}\n"
+                                f"👤 {CURRENT_USER} | 💰 {nuova_offerta:.2f} FM"
                                 )
 
                                 st.success(

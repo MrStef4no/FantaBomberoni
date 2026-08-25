@@ -142,8 +142,7 @@ def close_single_participant_auctions():
     conn.close()
 
 def process_open_auctions():
-    send_telegram_message("DEBUG - process_open_auctions eseguita")
-    
+        
     conn = sqlite3.connect(DB_PATH)
 
     cursor = conn.cursor()
@@ -157,6 +156,7 @@ def process_open_auctions():
     risultati = []
     spareggi = 0    
     max_round_aperto = 1
+    aste_in_parita = []
 
     aste = cursor.fetchall()
 
@@ -207,6 +207,23 @@ def process_open_auctions():
                 )
 
         elif risultato["tipo"] == "PARITA":
+
+            cursor.execute("""
+            SELECT nome
+            FROM players
+            WHERE player_id = (
+                SELECT player_id
+                FROM auctions
+                WHERE auction_id = ?
+            )
+            """, (auction_id,))
+
+            nome_giocatore = cursor.fetchone()[0]
+
+            aste_in_parita.append(
+                f"⚽ {nome_giocatore}\n"
+                f"🤝 Parità a {risultato['offerta']:.2f} FM"
+            )
 
             spareggi += 1
 
@@ -278,9 +295,7 @@ def process_open_auctions():
                 ))
 
     conn.commit()
-    send_telegram_message(
-        f"DEBUG risultati={len(risultati)} spareggi={spareggi}"
-    )
+    
     if risultati or spareggi > 0:
 
         messaggio = (
@@ -314,6 +329,11 @@ def process_open_auctions():
 
         scadenza = scadenza.strftime("%H:%M")
 
+        if aste_in_parita:
+
+            messaggio += "\n\n"
+            messaggio += "\n\n".join(aste_in_parita)
+      
         if spareggi > 0:
             messaggio += (
                 f"\n⚖️ Aperto nuovo round per {spareggi} aste entro le ore {scadenza}"

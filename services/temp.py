@@ -1,9 +1,7 @@
-import sqlite3
-
-conn = sqlite3.connect("database/fantalega.db")
-cur = conn.cursor()
-
-cur.execute("SELECT * FROM system_settings")
-print(cur.fetchall())
-
-conn.close()
+SELECT
+    round_id,
+    round_number,
+    stato
+FROM sealed_rounds
+WHERE auction_id = <ID_ASTA>
+ORDER BY round_number;

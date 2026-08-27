@@ -142,7 +142,7 @@ def close_single_participant_auctions():
     conn.close()
 
 def process_open_auctions():
-        
+    print("PROCESS_OPEN_AUCTIONS START")    
     conn = sqlite3.connect(DB_PATH)
 
     cursor = conn.cursor()
@@ -340,5 +340,5 @@ def process_open_auctions():
             )
 
         send_telegram_message(messaggio)
-
+    print("PROCESS_OPEN_AUCTIONS END")
     conn.close()

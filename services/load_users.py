@@ -27,14 +27,14 @@ utenti = {
     "FC La urina": "CAPTAIN",
     "Inter-Pol": "SERGENTE",
     "Il Re del Fantacalcio": "KING",
-    "PrimerPlate": "PRINCIPE",
-    "Kevin De SBruyne": "KDB",
+    "Rivolta al RE": "PRINCIPE",
+    "Borussia Baggins": "KDB",
     "SKIBIDI BRONDBY": "DOCTOR",
     "Faggiani Tattici Nucleari": "SISAL",
     "A.C. avanti chisto": "CIOCCA",
     "I Calypso Boys": "PRONGA",
     "Milancello": "MILANO",
-    "F.C. CdF": "MLAUS"
+    "Osasuca": "MLAUS"
 }
 
 for squadra, password in utenti.items():
